@@ -1,0 +1,46 @@
+---
+title: "Automatic Report"
+format: 
+  pdf:
+    documentclass: article
+    papersize: letter
+    geometry: margin=0.5in
+editor: visual
+---
+
+```{r setup, include=FALSE}
+# Load necessary libraries
+library(ggplot2)
+library(knitr)
+library(dplyr)
+
+# Create a small data frame
+small_df <- data.frame(
+  Column1 = c("A", "B"),
+  Column2 = c("C", "D"),
+  Column3 = c("E", "F")
+)
+
+# Display the table
+kable(small_df)
+
+# Generate some random data
+set.seed(123)
+data <- rnorm(100)
+
+# Create a histogram
+ggplot(data.frame(x = data), aes(x)) +
+  geom_histogram(binwidth = 0.5, fill = "blue", color = "black") +
+  labs(title = "Histogram of Random Data", x = "Value", y = "Frequency") +
+  theme(plot.title = element_text(size = 10), axis.title = element_text(size = 8))
+
+# Create a larger data frame
+large_df <- as.data.frame(matrix(runif(125), nrow = 5, ncol = 25))
+
+# Optionally add column names
+colnames(large_df) <- paste("Col", 1:25, sep = "")
+
+# Display the table
+kable(large_df)
+
+```
