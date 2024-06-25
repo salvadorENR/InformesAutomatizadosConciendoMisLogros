@@ -1,46 +1,40 @@
 ---
-title: "Automatic Report"
-format: 
-  pdf:
-    documentclass: article
-    papersize: letter
-    geometry: margin=0.5in
-editor: visual
+title: "Student Report"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: pdf_document
+params:
+  student_id: NULL
 ---
 
 ```{r setup, include=FALSE}
-# Load necessary libraries
-library(ggplot2)
-library(knitr)
+knitr::opts_chunk$set(echo = FALSE)
 library(dplyr)
+# Load the data
+results <- read.csv("results.csv")
 
-# Create a small data frame
-small_df <- data.frame(
-  Column1 = c("A", "B"),
-  Column2 = c("C", "D"),
-  Column3 = c("E", "F")
-)
+# Filter data for the specific student
+student_data <- results %>% filter(student_id == params$student_id)
 
-# Display the table
-kable(small_df)
+#*******************************************bash****************************************************************  
+### 4. Read and Process Data in R
 
-# Generate some random data
-set.seed(123)
-data <- rnorm(100)
+Create an R script (e.g., `generate_reports.R`) to read the CSV and generate the reports:
 
-# Create a histogram
-ggplot(data.frame(x = data), aes(x)) +
-  geom_histogram(binwidth = 0.5, fill = "blue", color = "black") +
-  labs(title = "Histogram of Random Data", x = "Value", y = "Frequency") +
-  theme(plot.title = element_text(size = 10), axis.title = element_text(size = 8))
+```r
+library(quarto)
 
-# Create a larger data frame
-large_df <- as.data.frame(matrix(runif(125), nrow = 5, ncol = 25))
+# Read the CSV file
+results <- read.csv("results.csv")
 
-# Optionally add column names
-colnames(large_df) <- paste("Col", 1:25, sep = "")
+# Generate a report for each student
+for (student_id in results$student_id) {
+  quarto_render(
+    input = "student_report.qmd",
+    output_file = paste0("report_", student_id, ".pdf"),
+    params = list(student_id = student_id)
+  )
+}
 
-# Display the table
-kable(large_df)
+source("generate_reports.R")
 
-```
